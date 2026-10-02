@@ -1,9 +1,9 @@
-# Empreintes des fichiers livres, tels qu'ils doivent arriver sur le serveur.
-# Les fichiers texte du depot (README, .gitattributes) ne sont volontairement pas listes :
-# git reecrit leurs fins de ligne au checkout, leur empreinte changerait donc sans que rien
-# ne soit altere. Les cinq fichiers ci-dessous sont marques binary et arrivent intacts.
+# Checksums of the delivered files, as they must arrive on the server.
+# The repository's own text files (README, .gitattributes) are deliberately left out:
+# git rewrites their line endings at checkout, so their checksum would change without
+# anything being altered. The five files below are marked binary and arrive intact.
 #
-# Verifier avec :  md5sum -c CHECKSUMS.md5
+# Verify with:  md5sum -c CHECKSUMS.md5
 eccc8015e267b3e2fd50fd14e43c8f12 *scene/simpsons_T001.SDAT
 642e5cdf976a75b5282062079bb191fe *scene/simpsons_T001.sdc
 5def67780767b70a0febe3dc4b7d1d37 *thumbnails/large_T001.png
