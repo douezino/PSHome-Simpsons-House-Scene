@@ -108,21 +108,29 @@ Recompute it if you change the SDC at all, or the client will refuse to enter th
 updated or the client fails the mount with `SEC: Failed to mount ..., result=-6` and hangs on
 *Downloading and preparing scene*.
 
-**The television video must stay MPEG-4 Part 2 Simple Profile.** `simpsons_tv.mp4` is already
-encoded that way — `mp4v`, 640×360, 29.97 fps, AAC-LC 44.1 kHz stereo — matching the format
-Sony's own screen-links files document and the two genuine Home videos we measured. H.264 is
-**not** rejected outright, which makes this nasty to diagnose: the video starts, plays three or
-four seconds, stalls, and restarts from the beginning in a loop, with no error in any log. If
-you re-encode it, use:
+**The television video's declared profile level is load-bearing.** `simpsons_tv.mp4` is MPEG-4
+Part 2, `mp4v`, 640x352, 29.97 fps, AAC-LC 44.1 kHz stereo, and its VOS header declares **Simple
+Profile Level 3** (`profile_and_level_indication = 0x03`). That byte is not cosmetic: the HDK
+documents that the client reads the profile level from the metadata and sizes its buffers from
+it, and that if the level is declared lower than the content needs, it allocates too little and
+*the video does not play*. An earlier build of this file declared Level 1 — which budgets for
+176x144 — and stalled a few seconds in, then looped, with nothing in any log. Sony's own scene
+videos declare Level 3 at 640x352 and 720x406, so this file matches them deliberately.
+
+H.264 is supported too (up to Level 3.0 outside video spaces), but it costs 25.96 MB of screen
+MAIN memory at Level 3 against 7.19 MB for this, which is poor value for a living-room TV.
+
+If you re-encode, keep the level explicit and check the byte afterwards:
 
 ```sh
-ffmpeg -i <source> -c:v mpeg4 -vtag mp4v -profile:v 0 -bf 0 -pix_fmt yuv420p \
-       -r 30000/1001 -g 150 -b:v 1100k -maxrate 1500k -bufsize 2000k \
+ffmpeg -i <source> -c:v mpeg4 -vtag mp4v -profile:v 0 -level 3 -bf 0 -pix_fmt yuv420p \
+       -s 640x352 -r 30000/1001 -g 150 -b:v 1090k -maxrate 1400k -bufsize 1800k \
        -c:a aac -profile:a aac_low -ar 44100 -ac 2 -b:a 128k \
        -brand mp42 -movflags +faststart <out>.mp4
 ```
 
-`-bf 0` matters: Simple Profile forbids B-frames.
+`-bf 0` matters as well: Simple Profile forbids B-frames. Video is stretched to fit the screen,
+so the 20:11 frame on a 16:9 panel is intentional and costs nothing.
 
 ## Credits and legal
 
