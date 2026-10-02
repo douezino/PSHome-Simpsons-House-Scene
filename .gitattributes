@@ -1,0 +1,4 @@
+*.SDAT  binary
+*.sdc   text eol=crlf
+*.mp4   binary
+*.png   binary
