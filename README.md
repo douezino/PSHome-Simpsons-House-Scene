@@ -45,6 +45,11 @@ we picked: `[THUMBNAIL_ROOT]` in the SDC resolves to the archive's own directory
 confirmed by hashing `…/Scenes/FarCry2TrainStation/large_T001.png` and landing exactly on the
 cached thumbnail the XMB shows for Sony's Far Cry 2 train station.
 
+Thumbnail sizes are the ones the HDK requires: the large one is 320x176 with no reserved
+margin, the small one is **128x128 square** — small *environment* thumbnails are the exception to
+the 13-pixel blank bands that object thumbnails carry, and both should fill their whole canvas.
+Every scene needs both.
+
 Checksums are in [`CHECKSUMS.md5`](CHECKSUMS.md5).
 
 ## Installing it
