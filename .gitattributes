@@ -1,4 +1,8 @@
-*.SDAT  binary
-*.sdc   text eol=crlf
-*.mp4   binary
-*.png   binary
+# Every delivered file must land byte for byte as it was built. The SDC looks like text, and
+# git duly normalised its CRLF to LF on commit -- which changed its length from 1339 to 1314
+# bytes and, with it, the SHA-1 that SceneList.xml has to carry. Sony's own SDCs use CRLF, so
+# the file is marked binary and git keeps its hands off.
+*.sdc    binary
+*.SDAT   binary
+*.mp4    binary
+*.png    binary
